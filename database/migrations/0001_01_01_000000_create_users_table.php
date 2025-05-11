@@ -13,11 +13,16 @@ return new class extends Migration
     {
         Schema::create('users', function (Blueprint $table) {
             $table->id();
-            $table->string('name');
+            $table->string('ad');
+            $table->string('soyad');
             $table->string('email')->unique();
+            $table->string('telefon');
+            $table->string('sifre');
+            $table->string('tc_no');
+            $table->foreignId('pozisyon_id')->nullable()->constrained('positions')->onDelete('set null');
+            $table->timestamp('kayit_tarihi');
+            $table->boolean('aktif_mi')->default(true);
             $table->timestamp('email_verified_at')->nullable();
-            $table->string('password');
-            $table->boolean('is_admin')->default(false);
             $table->rememberToken();
             $table->timestamps();
         });
