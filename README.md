@@ -1,61 +1,143 @@
-<p align="center"><a href="https://laravel.com" target="_blank"><img src="https://raw.githubusercontent.com/laravel/art/master/logo-lockup/5%20SVG/2%20CMYK/1%20Full%20Color/laravel-logolockup-cmyk-red.svg" width="400" alt="Laravel Logo"></a></p>
+# Mobil Tarife ve Kampanya Yönetim Sistemi
 
-<p align="center">
-<a href="https://github.com/laravel/framework/actions"><img src="https://github.com/laravel/framework/workflows/tests/badge.svg" alt="Build Status"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/dt/laravel/framework" alt="Total Downloads"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/v/laravel/framework" alt="Latest Stable Version"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/l/laravel/framework" alt="License"></a>
-</p>
+## Proje Hakkında
+Bu proje, mobil operatörler için tarife ve kampanya yönetim sistemidir. Sistem, müşterilerin tarife ve kampanyaları görüntülemesine, teklif oluşturmasına ve abonelik yönetimine olanak sağlar. Ayrıca, yöneticiler için kapsamlı bir yönetim paneli sunar.
 
-## About Laravel
+## Özellikler
 
-Laravel is a web application framework with expressive, elegant syntax. We believe development must be an enjoyable and creative experience to be truly fulfilling. Laravel takes the pain out of development by easing common tasks used in many web projects, such as:
+### Kullanıcı Özellikleri
+- Kullanıcı kaydı ve girişi
+- Tarife listeleme ve detay görüntüleme
+- Kampanya listeleme ve detay görüntüleme
+- Teklif oluşturma ve takip etme
+- Abonelik yönetimi
+- Kişisel profil yönetimi
 
-- [Simple, fast routing engine](https://laravel.com/docs/routing).
-- [Powerful dependency injection container](https://laravel.com/docs/container).
-- Multiple back-ends for [session](https://laravel.com/docs/session) and [cache](https://laravel.com/docs/cache) storage.
-- Expressive, intuitive [database ORM](https://laravel.com/docs/eloquent).
-- Database agnostic [schema migrations](https://laravel.com/docs/migrations).
-- [Robust background job processing](https://laravel.com/docs/queues).
-- [Real-time event broadcasting](https://laravel.com/docs/broadcasting).
+### Yönetici Özellikleri
+- Kullanıcı yönetimi
+- Tarife yönetimi (ekleme, düzenleme, silme)
+- Kampanya yönetimi (ekleme, düzenleme, silme)
+- Abonelik yönetimi
+- Teklif onaylama/reddetme
+- İstatistik ve raporlama
+- Dashboard ile genel durum takibi
 
-Laravel is accessible, powerful, and provides tools required for large, robust applications.
+## Teknik Detaylar
 
-## Learning Laravel
+### Kullanılan Teknolojiler
+- PHP 8.2
+- Laravel 12.13.0
+- MySQL
+- Bootstrap 5
+- AdminLTE 3.2
+- Chart.js
+- Font Awesome
 
-Laravel has the most extensive and thorough [documentation](https://laravel.com/docs) and video tutorial library of all modern web application frameworks, making it a breeze to get started with the framework.
+### Veritabanı Yapısı
+- users: Kullanıcı bilgileri
+- tarifeler: Tarife detayları
+- kampanyalar: Kampanya bilgileri
+- abonelikler: Abonelik kayıtları
+- teklifs: Teklif kayıtları
+- sessions: Oturum yönetimi
+- password_reset_tokens: Şifre sıfırlama işlemleri
 
-You may also try the [Laravel Bootcamp](https://bootcamp.laravel.com), where you will be guided through building a modern Laravel application from scratch.
+### Güvenlik Özellikleri
+- CSRF koruması
+- XSS koruması
+- SQL injection koruması
+- Şifre hashleme
+- Oturum yönetimi
+- Yetkilendirme kontrolleri
+- Rate limiting
 
-If you don't feel like reading, [Laracasts](https://laracasts.com) can help. Laracasts contains thousands of video tutorials on a range of topics including Laravel, modern PHP, unit testing, and JavaScript. Boost your skills by digging into our comprehensive video library.
+### Kurulum
 
-## Laravel Sponsors
+1. Projeyi klonlayın:
+```bash
+git clone [proje-url]
+```
 
-We would like to extend our thanks to the following sponsors for funding Laravel development. If you are interested in becoming a sponsor, please visit the [Laravel Partners program](https://partners.laravel.com).
+2. Bağımlılıkları yükleyin:
+```bash
+composer install
+```
 
-### Premium Partners
+3. .env dosyasını oluşturun:
+```bash
+cp .env.example .env
+```
 
-- **[Vehikl](https://vehikl.com/)**
-- **[Tighten Co.](https://tighten.co)**
-- **[Kirschbaum Development Group](https://kirschbaumdevelopment.com)**
-- **[64 Robots](https://64robots.com)**
-- **[Curotec](https://www.curotec.com/services/technologies/laravel/)**
-- **[DevSquad](https://devsquad.com/hire-laravel-developers)**
-- **[Redberry](https://redberry.international/laravel-development/)**
-- **[Active Logic](https://activelogic.com)**
+4. Veritabanı ayarlarını yapılandırın:
+```env
+DB_CONNECTION=mysql
+DB_HOST=127.0.0.1
+DB_PORT=3306
+DB_DATABASE=mobil_tarife_kampanya
+DB_USERNAME=root
+DB_PASSWORD=
+```
 
-## Contributing
+5. Uygulama anahtarını oluşturun:
+```bash
+php artisan key:generate
+```
 
-Thank you for considering contributing to the Laravel framework! The contribution guide can be found in the [Laravel documentation](https://laravel.com/docs/contributions).
+6. Veritabanı tablolarını oluşturun:
+```bash
+php artisan migrate
+```
 
-## Code of Conduct
+7. Örnek verileri yükleyin:
+```bash
+php artisan db:seed
+```
 
-In order to ensure that the Laravel community is welcoming to all, please review and abide by the [Code of Conduct](https://laravel.com/docs/contributions#code-of-conduct).
+8. Uygulamayı çalıştırın:
+```bash
+php artisan serve
+```
 
-## Security Vulnerabilities
+### Varsayılan Kullanıcılar
 
-If you discover a security vulnerability within Laravel, please send an e-mail to Taylor Otwell via [taylor@laravel.com](mailto:taylor@laravel.com). All security vulnerabilities will be promptly addressed.
+#### Admin Kullanıcısı
+- Email: admin@example.com
+- Şifre: password
 
-## License
+#### Test Kullanıcısı
+- Email: test@example.com
+- Şifre: password
 
-The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
+## Kullanım Kılavuzu
+
+### Kullanıcı Paneli
+1. Kayıt olun veya giriş yapın
+2. Ana sayfada mevcut tarife ve kampanyaları görüntüleyin
+3. İstediğiniz tarife için teklif oluşturun
+4. Tekliflerinizi "Tekliflerim" sayfasından takip edin
+5. Onaylanan teklifler için abonelik oluşturun
+6. Aboneliklerinizi "Aboneliklerim" sayfasından yönetin
+
+### Yönetici Paneli
+1. Admin hesabıyla giriş yapın
+2. Dashboard'da genel istatistikleri görüntüleyin
+3. Sol menüden ilgili bölümlere erişin:
+   - Tarifeler: Tarife yönetimi
+   - Kampanyalar: Kampanya yönetimi
+   - Abonelikler: Abonelik yönetimi
+   - Teklifler: Teklif onaylama/reddetme
+
+## Katkıda Bulunma
+1. Bu depoyu fork edin
+2. Yeni bir özellik dalı oluşturun (`git checkout -b yeni-ozellik`)
+3. Değişikliklerinizi commit edin (`git commit -am 'Yeni özellik eklendi'`)
+4. Dalınıza push yapın (`git push origin yeni-ozellik`)
+5. Bir Pull Request oluşturun
+
+## Lisans
+Bu proje MIT lisansı altında lisanslanmıştır. Detaylar için [LICENSE](LICENSE) dosyasına bakın.
+
+## İletişim
+Proje sahibi: [İsim] - [Email]
+
+Proje Linki: [https://github.com/kullanici/mobil-tarife-kampanya](https://github.com/kullanici/mobil-tarife-kampanya)
