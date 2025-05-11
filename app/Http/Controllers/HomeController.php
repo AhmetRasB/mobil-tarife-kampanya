@@ -32,12 +32,23 @@ class HomeController extends Controller
         
         if ($user->is_admin) {
             // Admin dashboard
+            $totalUsers = \App\Models\User::count();
             $totalTarifeler = Tarife::count();
             $totalKampanyalar = Kampanya::count();
             $totalAbonelikler = Abonelik::count();
             $bekleyenTeklifler = Teklif::where('durum', 'beklemede')->count();
             
-            return view('admin.dashboard', compact('totalTarifeler', 'totalKampanyalar', 'totalAbonelikler', 'bekleyenTeklifler'));
+            // Son 5 yeni kullanıcı
+            $recentUsers = \App\Models\User::orderBy('created_at', 'desc')->take(5)->get();
+            
+            // Son 30 gün için günlük yeni kullanıcı grafiği
+            $userStats = \App\Models\User::selectRaw('DATE(created_at) as date, COUNT(*) as count')
+                ->where('created_at', '>=', now()->subDays(30))
+                ->groupBy('date')
+                ->orderBy('date')
+                ->get();
+            
+            return view('admin.dashboard', compact('totalUsers', 'totalTarifeler', 'totalKampanyalar', 'totalAbonelikler', 'bekleyenTeklifler', 'recentUsers', 'userStats'));
         } else {
             // Regular user dashboard - direkt tarifeleri ve kampanyaları gösterelim
             $tarifeler = Tarife::where('aktif', true)->get();
