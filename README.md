@@ -138,6 +138,6 @@ php artisan serve
 Bu proje MIT lisansı altında lisanslanmıştır. Detaylar için [LICENSE](LICENSE) dosyasına bakın.
 
 ## İletişim
-Proje sahibi: [İsim] - [Email]
+Proje sahibi: [AhmetRasB] - [ahmetrasimbayhan@gmail.com]
 
-Proje Linki: [https://github.com/kullanici/mobil-tarife-kampanya](https://github.com/kullanici/mobil-tarife-kampanya)
+Proje Linki: [https://github.com/ahmetrasb/mobil-tarife-kampanya](https://github.com/ahmetrasb/mobil-tarife-kampanya)
