@@ -22,6 +22,33 @@ Bu proje, mobil operatörler için tarife ve kampanya yönetim sistemidir. Siste
 - İstatistik ve raporlama
 - Dashboard ile genel durum takibi
 
+### Abonelik ve Fatura Yönetimi
+- Otomatik fatura oluşturma
+- Aylık fatura takibi
+- Fatura durumu yönetimi (ödenmiş/ödenmemiş/askıya alınmış)
+- Fatura dönemi takibi
+- Fatura açıklamaları ve detayları
+
+### Cihaz ve SIM Kart Yönetimi
+- Telefon envanteri takibi
+- SIM kart durumu yönetimi
+- IMEI ve seri numarası takibi
+- Cihaz durumu izleme (aktif/pasif/arızalı)
+- SIM kart aktivasyon takibi
+
+### Raporlama Sistemi
+- Abone raporları
+- Stok raporları
+- Finansal raporlar
+- Aylık/yıllık istatistikler
+- Grafiksel analizler
+
+### Teknik Güncellemeler
+- Subscriber tablosunda tc_no alanı nullable yapıldı
+- Teklif onaylama sürecinde abone oluşturma iyileştirildi
+- Fatura oluşturma servisi eklendi
+- Abonelik-fatura ilişkisi kuruldu
+
 ## Teknik Detaylar
 
 ### Kullanılan Teknolojiler
@@ -183,6 +210,6 @@ php artisan serve
 Bu proje MIT lisansı altında lisanslanmıştır. Detaylar için [LICENSE](LICENSE) dosyasına bakın.
 
 ## İletişim
-Proje sahibi: [İsim] - [Email]
+Proje sahibi: Ahmet Rasim BEYHAN
 
 Proje Linki: [https://github.com/kullanici/mobil-tarife-kampanya](https://github.com/kullanici/mobil-tarife-kampanya)
