@@ -118,12 +118,6 @@ use Illuminate\Support\Facades\Auth;
                             </form>
                         </div>
                         @endif
-                        
-                        @if($teklif->durum == 'onaylandi')
-                            @if(Auth::user() && Auth::user()->is_admin)
-                                <a href="{{ route('abonelikler.create', ['teklif_id' => $teklif->id]) }}" class="btn btn-primary">Abonelik Oluştur</a>
-                            @endif
-                        @endif
                     </div>
                 </div>
             </div>

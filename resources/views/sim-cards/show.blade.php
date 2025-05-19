@@ -1,4 +1,4 @@
-@extends('layouts.app')
+@extends('layouts.admin')
 
 @section('content')
 <div class="container-fluid">
@@ -8,10 +8,10 @@
                 <div class="card-header">
                     <h3 class="card-title">SIM Kart Detayları</h3>
                     <div class="card-tools">
-                        <a href="{{ route('sim-cards.edit', $simCard) }}" class="btn btn-warning btn-sm">
+                        <a href="{{ route('admin.sim-cards.edit', $simCard) }}" class="btn btn-warning btn-sm">
                             <i class="fas fa-edit"></i> Düzenle
                         </a>
-                        <a href="{{ route('sim-cards.index') }}" class="btn btn-secondary btn-sm">
+                        <a href="{{ route('admin.sim-cards.index') }}" class="btn btn-secondary btn-sm">
                             <i class="fas fa-arrow-left"></i> Geri
                         </a>
                     </div>
@@ -34,7 +34,7 @@
                                 </tr>
                                 <tr>
                                     <th>Aktivasyon Tarihi</th>
-                                    <td>{{ $simCard->aktivasyon_tarihi->format('d.m.Y') }}</td>
+                                    <td>{{ \Carbon\Carbon::parse($simCard->aktivasyon_tarihi)->format('d.m.Y') }}</td>
                                 </tr>
                                 <tr>
                                     <th>Durum</th>
@@ -48,7 +48,7 @@
                                     <th>Abone</th>
                                     <td>
                                         @if($simCard->subscriber)
-                                            <a href="{{ route('subscribers.show', $simCard->subscriber) }}">
+                                            <a href="{{ route('admin.subscribers.show', $simCard->subscriber) }}">
                                                 {{ $simCard->subscriber->ad }} {{ $simCard->subscriber->soyad }}
                                             </a>
                                         @else
@@ -77,7 +77,7 @@
                                     <tbody>
                                         @foreach($simCard->callLogs as $log)
                                             <tr>
-                                                <td>{{ $log->tarih->format('d.m.Y H:i') }}</td>
+                                                <td>{{ \Carbon\Carbon::parse($log->tarih)->format('d.m.Y H:i') }}</td>
                                                 <td>{{ $log->numara }}</td>
                                                 <td>{{ $log->sure }} saniye</td>
                                                 <td>{{ ucfirst($log->tip) }}</td>
@@ -110,7 +110,7 @@
                                     <tbody>
                                         @foreach($simCard->smsLogs as $log)
                                             <tr>
-                                                <td>{{ $log->tarih->format('d.m.Y H:i') }}</td>
+                                                <td>{{ \Carbon\Carbon::parse($log->tarih)->format('d.m.Y H:i') }}</td>
                                                 <td>{{ $log->alici }}</td>
                                                 <td>{{ Str::limit($log->mesaj, 50) }}</td>
                                                 <td>

@@ -31,7 +31,7 @@ class SubscriberController extends Controller
 
         Subscriber::create($validated);
 
-        return redirect()->route('subscribers.index')
+        return redirect()->route('admin.subscribers.index')
             ->with('success', 'Abone başarıyla oluşturuldu.');
     }
 
@@ -58,7 +58,7 @@ class SubscriberController extends Controller
 
         $subscriber->update($validated);
 
-        return redirect()->route('subscribers.index')
+        return redirect()->route('admin.subscribers.index')
             ->with('success', 'Abone başarıyla güncellendi.');
     }
 
@@ -66,7 +66,7 @@ class SubscriberController extends Controller
     {
         $subscriber->delete();
 
-        return redirect()->route('subscribers.index')
+        return redirect()->route('admin.subscribers.index')
             ->with('success', 'Abone başarıyla silindi.');
     }
 } 

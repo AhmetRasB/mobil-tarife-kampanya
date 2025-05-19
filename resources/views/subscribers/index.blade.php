@@ -1,4 +1,4 @@
-@extends('layouts.app')
+@extends('layouts.admin')
 
 @section('content')
 <div class="container-fluid">
@@ -8,7 +8,7 @@
                 <div class="card-header">
                     <h3 class="card-title">Aboneler</h3>
                     <div class="card-tools">
-                        <a href="{{ route('subscribers.create') }}" class="btn btn-primary btn-sm">
+                        <a href="{{ route('admin.subscribers.create') }}" class="btn btn-primary btn-sm">
                             <i class="fas fa-plus"></i> Yeni Abone
                         </a>
                     </div>
@@ -50,13 +50,13 @@
                                         </span>
                                     </td>
                                     <td>
-                                        <a href="{{ route('subscribers.show', $subscriber) }}" class="btn btn-info btn-sm">
+                                        <a href="{{ route('admin.subscribers.show', $subscriber) }}" class="btn btn-info btn-sm">
                                             <i class="fas fa-eye"></i>
                                         </a>
-                                        <a href="{{ route('subscribers.edit', $subscriber) }}" class="btn btn-warning btn-sm">
+                                        <a href="{{ route('admin.subscribers.edit', $subscriber) }}" class="btn btn-warning btn-sm">
                                             <i class="fas fa-edit"></i>
                                         </a>
-                                        <form action="{{ route('subscribers.destroy', $subscriber) }}" method="POST" class="d-inline">
+                                        <form action="{{ route('admin.subscribers.destroy', $subscriber) }}" method="POST" class="d-inline">
                                             @csrf
                                             @method('DELETE')
                                             <button type="submit" class="btn btn-danger btn-sm" onclick="return confirm('Emin misiniz?')">

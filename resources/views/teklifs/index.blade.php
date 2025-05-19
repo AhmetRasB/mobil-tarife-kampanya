@@ -74,10 +74,6 @@ use Illuminate\Support\Facades\Auth;
                                         <div class="btn-group" role="group">
                                             <a href="{{ route('teklifs.show', $teklif->id) }}" class="btn btn-info btn-sm">Detay</a>
                                             
-                                            @if(Auth::user() && Auth::user()->is_admin && $teklif->durum == 'onaylandi')
-                                                <a href="{{ route('abonelikler.create', ['teklif_id' => $teklif->id]) }}" class="btn btn-primary btn-sm">Abonelik</a>
-                                            @endif
-                                            
                                             @if(Auth::user() && (Auth::user()->is_admin || $teklif->user_id == Auth::id()))
                                                 <form action="{{ route('teklifs.destroy', $teklif->id) }}" method="POST" class="d-inline" onsubmit="return confirm('Bu teklifi silmek istediğinizden emin misiniz?')">
                                                     @csrf

@@ -1,4 +1,4 @@
-@extends('layouts.app')
+@extends('layouts.admin')
 
 @section('content')
 <div class="container-fluid">
@@ -9,7 +9,7 @@
                     <h3 class="card-title">SIM Kart Düzenle</h3>
                 </div>
                 <div class="card-body">
-                    <form action="{{ route('sim-cards.update', $simCard) }}" method="POST">
+                    <form action="{{ route('admin.sim-cards.update', $simCard) }}" method="POST">
                         @csrf
                         @method('PUT')
 
@@ -39,7 +39,7 @@
 
                         <div class="form-group">
                             <label for="aktivasyon_tarihi">Aktivasyon Tarihi</label>
-                            <input type="date" class="form-control @error('aktivasyon_tarihi') is-invalid @enderror" id="aktivasyon_tarihi" name="aktivasyon_tarihi" value="{{ old('aktivasyon_tarihi', $simCard->aktivasyon_tarihi->format('Y-m-d')) }}" required>
+                            <input type="date" class="form-control @error('aktivasyon_tarihi') is-invalid @enderror" id="aktivasyon_tarihi" name="aktivasyon_tarihi" value="{{ old('aktivasyon_tarihi', \Carbon\Carbon::parse($simCard->aktivasyon_tarihi)->format('Y-m-d')) }}" required>
                             @error('aktivasyon_tarihi')
                                 <span class="invalid-feedback">{{ $message }}</span>
                             @enderror
@@ -74,7 +74,7 @@
 
                         <div class="form-group">
                             <button type="submit" class="btn btn-primary">Güncelle</button>
-                            <a href="{{ route('sim-cards.index') }}" class="btn btn-secondary">İptal</a>
+                            <a href="{{ route('admin.sim-cards.index') }}" class="btn btn-secondary">İptal</a>
                         </div>
                     </form>
                 </div>

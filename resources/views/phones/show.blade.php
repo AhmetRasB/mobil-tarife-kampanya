@@ -1,4 +1,4 @@
-@extends('layouts.app')
+@extends('layouts.admin')
 
 @section('content')
 <div class="container-fluid">
@@ -8,10 +8,10 @@
                 <div class="card-header">
                     <h3 class="card-title">Telefon Detayları</h3>
                     <div class="card-tools">
-                        <a href="{{ route('phones.edit', $phone) }}" class="btn btn-warning btn-sm">
+                        <a href="{{ route('admin.phones.edit', $phone) }}" class="btn btn-warning btn-sm">
                             <i class="fas fa-edit"></i> Düzenle
                         </a>
-                        <a href="{{ route('phones.index') }}" class="btn btn-secondary btn-sm">
+                        <a href="{{ route('admin.phones.index') }}" class="btn btn-secondary btn-sm">
                             <i class="fas fa-arrow-left"></i> Geri
                         </a>
                     </div>
@@ -56,7 +56,7 @@
                                     <th>Abone</th>
                                     <td>
                                         @if($phone->subscriber)
-                                            <a href="{{ route('subscribers.show', $phone->subscriber) }}">
+                                            <a href="{{ route('admin.subscribers.show', $phone->subscriber) }}">
                                                 {{ $phone->subscriber->ad }} {{ $phone->subscriber->soyad }}
                                             </a>
                                         @else

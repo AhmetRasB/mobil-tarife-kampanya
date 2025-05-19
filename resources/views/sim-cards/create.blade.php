@@ -1,4 +1,4 @@
-@extends('layouts.app')
+@extends('layouts.admin')
 
 @section('content')
 <div class="container-fluid">
@@ -9,7 +9,7 @@
                     <h3 class="card-title">Yeni SIM Kart Ekle</h3>
                 </div>
                 <div class="card-body">
-                    <form action="{{ route('sim-cards.store') }}" method="POST">
+                    <form action="{{ route('admin.sim-cards.store') }}" method="POST">
                         @csrf
 
                         <div class="form-group">
@@ -73,7 +73,7 @@
 
                         <div class="form-group">
                             <button type="submit" class="btn btn-primary">Kaydet</button>
-                            <a href="{{ route('sim-cards.index') }}" class="btn btn-secondary">İptal</a>
+                            <a href="{{ route('admin.sim-cards.index') }}" class="btn btn-secondary">İptal</a>
                         </div>
                     </form>
                 </div>

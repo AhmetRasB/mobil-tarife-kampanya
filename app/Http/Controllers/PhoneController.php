@@ -35,7 +35,7 @@ class PhoneController extends Controller
 
         Phone::create($validated);
 
-        return redirect()->route('phones.index')
+        return redirect()->route('admin.phones.index')
             ->with('success', 'Telefon başarıyla kaydedildi.');
     }
 
@@ -66,7 +66,7 @@ class PhoneController extends Controller
 
         $phone->update($validated);
 
-        return redirect()->route('phones.index')
+        return redirect()->route('admin.phones.index')
             ->with('success', 'Telefon başarıyla güncellendi.');
     }
 
@@ -74,7 +74,7 @@ class PhoneController extends Controller
     {
         $phone->delete();
 
-        return redirect()->route('phones.index')
+        return redirect()->route('admin.phones.index')
             ->with('success', 'Telefon başarıyla silindi.');
     }
 } 

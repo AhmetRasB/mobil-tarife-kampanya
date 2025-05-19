@@ -13,7 +13,7 @@
                 <div class="icon">
                     <i class="fas fa-users"></i>
                 </div>
-                <a href="{{ route('subscribers.index') }}" class="small-box-footer">
+                <a href="{{ route('admin.subscribers.index') }}" class="small-box-footer">
                     Detaylar <i class="fas fa-arrow-circle-right"></i>
                 </a>
             </div>
@@ -80,13 +80,13 @@
                                     </h3>
                                 </div>
                                 <div class="card-body">
-                                    <a href="{{ route('subscribers.create') }}" class="btn btn-primary btn-block mb-2">
+                                    <a href="{{ route('admin.subscribers.create') }}" class="btn btn-primary btn-block mb-2">
                                         <i class="fas fa-user-plus"></i> Yeni Abone Ekle
                                     </a>
                                     <a href="{{ route('subscriptions.create') }}" class="btn btn-info btn-block mb-2">
                                         <i class="fas fa-plus-circle"></i> Yeni Abonelik Oluştur
                                     </a>
-                                    <a href="{{ route('subscribers.index') }}" class="btn btn-secondary btn-block">
+                                    <a href="{{ route('admin.subscribers.index') }}" class="btn btn-secondary btn-block">
                                         <i class="fas fa-list"></i> Abone Listesi
                                     </a>
                                 </div>

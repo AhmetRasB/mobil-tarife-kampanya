@@ -1,4 +1,4 @@
-@extends('layouts.app')
+@extends('layouts.admin')
 
 @section('content')
 <div class="container-fluid">
@@ -8,7 +8,7 @@
                 <div class="card-header">
                     <h3 class="card-title">Telefonlar</h3>
                     <div class="card-tools">
-                        <a href="{{ route('phones.create') }}" class="btn btn-primary btn-sm">
+                        <a href="{{ route('admin.phones.create') }}" class="btn btn-primary btn-sm">
                             <i class="fas fa-plus"></i> Yeni Telefon
                         </a>
                     </div>
@@ -58,13 +58,13 @@
                                         @endif
                                     </td>
                                     <td>
-                                        <a href="{{ route('phones.show', $phone) }}" class="btn btn-info btn-sm">
+                                        <a href="{{ route('admin.phones.show', $phone) }}" class="btn btn-info btn-sm">
                                             <i class="fas fa-eye"></i>
                                         </a>
-                                        <a href="{{ route('phones.edit', $phone) }}" class="btn btn-warning btn-sm">
+                                        <a href="{{ route('admin.phones.edit', $phone) }}" class="btn btn-warning btn-sm">
                                             <i class="fas fa-edit"></i>
                                         </a>
-                                        <form action="{{ route('phones.destroy', $phone) }}" method="POST" class="d-inline">
+                                        <form action="{{ route('admin.phones.destroy', $phone) }}" method="POST" class="d-inline">
                                             @csrf
                                             @method('DELETE')
                                             <button type="submit" class="btn btn-danger btn-sm" onclick="return confirm('Emin misiniz?')">

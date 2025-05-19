@@ -1,4 +1,4 @@
-@extends('layouts.app')
+@extends('layouts.admin')
 
 @section('content')
 <div class="container-fluid">
@@ -8,7 +8,7 @@
                 <div class="card-header">
                     <h3 class="card-title">SIM Kartlar</h3>
                     <div class="card-tools">
-                        <a href="{{ route('sim-cards.create') }}" class="btn btn-primary btn-sm">
+                        <a href="{{ route('admin.sim-cards.create') }}" class="btn btn-primary btn-sm">
                             <i class="fas fa-plus"></i> Yeni SIM Kart
                         </a>
                     </div>
@@ -40,7 +40,7 @@
                                     <td>{{ $simCard->numara }}</td>
                                     <td>{{ $simCard->puk }}</td>
                                     <td>{{ $simCard->pin }}</td>
-                                    <td>{{ $simCard->aktivasyon_tarihi->format('d.m.Y') }}</td>
+                                    <td>{{ \Carbon\Carbon::parse($simCard->aktivasyon_tarihi)->format('d.m.Y') }}</td>
                                     <td>
                                         <span class="badge badge-{{ $simCard->durum === 'aktif' ? 'success' : ($simCard->durum === 'pasif' ? 'warning' : 'danger') }}">
                                             {{ ucfirst($simCard->durum) }}
@@ -54,13 +54,13 @@
                                         @endif
                                     </td>
                                     <td>
-                                        <a href="{{ route('sim-cards.show', $simCard) }}" class="btn btn-info btn-sm">
+                                        <a href="{{ route('admin.sim-cards.show', $simCard) }}" class="btn btn-info btn-sm">
                                             <i class="fas fa-eye"></i>
                                         </a>
-                                        <a href="{{ route('sim-cards.edit', $simCard) }}" class="btn btn-warning btn-sm">
+                                        <a href="{{ route('admin.sim-cards.edit', $simCard) }}" class="btn btn-warning btn-sm">
                                             <i class="fas fa-edit"></i>
                                         </a>
-                                        <form action="{{ route('sim-cards.destroy', $simCard) }}" method="POST" class="d-inline">
+                                        <form action="{{ route('admin.sim-cards.destroy', $simCard) }}" method="POST" class="d-inline">
                                             @csrf
                                             @method('DELETE')
                                             <button type="submit" class="btn btn-danger btn-sm" onclick="return confirm('Emin misiniz?')">

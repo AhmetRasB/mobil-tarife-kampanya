@@ -8,10 +8,10 @@
                 <div class="card-header">
                     <h3 class="card-title">Yedekleme</h3>
                     <div class="card-tools">
-                        <a href="{{ route('system-settings.general') }}" class="btn btn-primary btn-sm">
+                        <a href="{{ route('admin.settings.general') }}" class="btn btn-primary btn-sm">
                             <i class="fas fa-cog"></i> Genel Ayarlar
                         </a>
-                        <a href="{{ route('system-settings.notifications') }}" class="btn btn-info btn-sm">
+                        <a href="{{ route('admin.settings.notifications') }}" class="btn btn-info btn-sm">
                             <i class="fas fa-bell"></i> Bildirim Ayarları
                         </a>
                     </div>
@@ -24,7 +24,7 @@
                         </div>
                         <div class="card-body">
                             <p>Veritabanının tam bir yedeğini almak için aşağıdaki butona tıklayın.</p>
-                            <form action="{{ route('system-settings.create-backup') }}" method="POST" class="d-inline">
+                            <form action="{{ route('admin.settings.create-backup') }}" method="POST" class="d-inline">
                                 @csrf
                                 <button type="submit" class="btn btn-primary">
                                     <i class="fas fa-download"></i> Yedek Oluştur
@@ -56,7 +56,7 @@
                                                 <td>{{ number_format(Storage::disk('backups')->size($backup) / 1024 / 1024, 2) }} MB</td>
                                                 <td>{{ date('d.m.Y H:i:s', Storage::disk('backups')->lastModified($backup)) }}</td>
                                                 <td>
-                                                    <a href="{{ route('system-settings.download-backup', ['filename' => basename($backup)]) }}" 
+                                                    <a href="{{ route('admin.settings.download-backup', ['filename' => basename($backup)]) }}" 
                                                         class="btn btn-info btn-sm">
                                                         <i class="fas fa-download"></i>
                                                     </a>
@@ -124,7 +124,7 @@
 @push('scripts')
 <script>
 function deleteBackup(filename) {
-    $('#deleteBackupForm').attr('action', '{{ route("system-settings.delete-backup", ["filename" => ""]) }}/' + filename);
+    $('#deleteBackupForm').attr('action', '{{ route("admin.settings.delete-backup", ["filename" => ""]) }}/' + filename);
     $('#deleteBackupModal').modal('show');
 }
 </script>

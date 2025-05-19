@@ -33,8 +33,8 @@ class SimCardController extends Controller
 
         SimCard::create($validated);
 
-        return redirect()->route('sim-cards.index')
-            ->with('success', 'SIM kart başarıyla kaydedildi.');
+        return redirect()->route('admin.sim-cards.index')
+            ->with('success', 'SIM Kart başarıyla kaydedildi.');
     }
 
     public function show(SimCard $simCard)
@@ -62,15 +62,15 @@ class SimCardController extends Controller
 
         $simCard->update($validated);
 
-        return redirect()->route('sim-cards.index')
-            ->with('success', 'SIM kart başarıyla güncellendi.');
+        return redirect()->route('admin.sim-cards.index')
+            ->with('success', 'SIM Kart başarıyla güncellendi.');
     }
 
     public function destroy(SimCard $simCard)
     {
         $simCard->delete();
 
-        return redirect()->route('sim-cards.index')
-            ->with('success', 'SIM kart başarıyla silindi.');
+        return redirect()->route('admin.sim-cards.index')
+            ->with('success', 'SIM Kart başarıyla silindi.');
     }
 } 

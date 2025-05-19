@@ -25,13 +25,13 @@
                     </a>
                     <ul class="nav nav-treeview">
                         <li class="nav-item">
-                            <a href="{{ route('subscribers.index') }}" class="nav-link {{ request()->routeIs('subscribers.*') ? 'active' : '' }}">
+                            <a href="{{ route('admin.subscribers.index') }}" class="nav-link {{ request()->routeIs('admin.subscribers.*') ? 'active' : '' }}">
                                 <i class="far fa-circle nav-icon"></i>
                                 <p>Aboneler</p>
                             </a>
                         </li>
                         <li class="nav-item">
-                            <a href="{{ route('subscriptions.index') }}" class="nav-link {{ request()->routeIs('subscriptions.*') ? 'active' : '' }}">
+                            <a href="{{ route('admin.abonelikler.index') }}" class="nav-link {{ request()->routeIs('admin.abonelikler.*') ? 'active' : '' }}">
                                 <i class="far fa-circle nav-icon"></i>
                                 <p>Abonelikler</p>
                             </a>
@@ -50,19 +50,19 @@
                     </a>
                     <ul class="nav nav-treeview">
                         <li class="nav-item">
-                            <a href="{{ route('phones.index') }}" class="nav-link {{ request()->routeIs('phones.*') ? 'active' : '' }}">
+                            <a href="{{ route('admin.phones.index') }}" class="nav-link {{ request()->routeIs('admin.phones.*') ? 'active' : '' }}">
                                 <i class="far fa-circle nav-icon"></i>
                                 <p>Telefonlar</p>
                             </a>
                         </li>
                         <li class="nav-item">
-                            <a href="{{ route('sim-cards.index') }}" class="nav-link {{ request()->routeIs('sim-cards.*') ? 'active' : '' }}">
+                            <a href="{{ route('admin.sim-cards.index') }}" class="nav-link {{ request()->routeIs('admin.sim-cards.*') ? 'active' : '' }}">
                                 <i class="far fa-circle nav-icon"></i>
                                 <p>SIM Kartlar</p>
                             </a>
                         </li>
                         <li class="nav-item">
-                            <a href="{{ route('devices.index') }}" class="nav-link {{ request()->routeIs('devices.*') ? 'active' : '' }}">
+                            <a href="{{ route('admin.devices.index') }}" class="nav-link {{ request()->routeIs('admin.devices.*') ? 'active' : '' }}">
                                 <i class="far fa-circle nav-icon"></i>
                                 <p>Diğer Cihazlar</p>
                             </a>
@@ -218,6 +218,39 @@
                         </li>
                     </ul>
                 </li>
+
+                <!-- Admin Menu Items -->
+                @if(auth()->user()->is_admin)
+                    <!-- Faturalar -->
+                    <li class="nav-item">
+                        <a href="{{ route('admin.invoices.index') }}" class="nav-link {{ request()->routeIs('admin.invoices.*') ? 'active' : '' }}">
+                            <i class="nav-icon fas fa-file-invoice"></i>
+                            <p>
+                                Faturalar
+                                <i class="right fas fa-angle-left"></i>
+                            </p>
+                        </a>
+                        <ul class="nav nav-treeview">
+                            <li class="nav-item">
+                                <a href="{{ route('admin.invoices.index') }}" class="nav-link {{ request()->routeIs('admin.invoices.index') ? 'active' : '' }}">
+                                    <i class="far fa-circle nav-icon"></i>
+                                    <p>Tüm Faturalar</p>
+                                </a>
+                            </li>
+                        </ul>
+                    </li>
+                @endif
+
+                <!-- User Menu Items -->
+                @if(!auth()->user()->is_admin)
+                    <!-- Faturalarım -->
+                    <li class="nav-item">
+                        <a href="{{ route('pay.index') }}" class="nav-link {{ request()->routeIs('pay.*') ? 'active' : '' }}">
+                            <i class="nav-icon fas fa-file-invoice"></i>
+                            <p>Faturalarım</p>
+                        </a>
+                    </li>
+                @endif
             </ul>
         </nav>
     </div>

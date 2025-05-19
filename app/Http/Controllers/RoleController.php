@@ -3,65 +3,102 @@
 namespace App\Http\Controllers;
 
 use App\Models\Role;
+use App\Models\Permission;
+use App\Models\User;
 use Illuminate\Http\Request;
 
 class RoleController extends Controller
 {
+    public function __construct()
+    {
+        $this->middleware(['auth', 'admin']);
+    }
+
     public function index()
     {
-        $roles = Role::paginate(10);
-        return view('roles.index', compact('roles'));
+        $roles = Role::all();
+        return view('admin.roles.index', compact('roles'));
     }
 
     public function create()
     {
-        return view('roles.create');
+        $users = User::all();
+        return view('admin.roles.create', compact('users'));
     }
 
     public function store(Request $request)
     {
-        $validated = $request->validate([
-            'name' => 'required|string|max:255|unique:roles',
-            'description' => 'nullable|string',
-            'permissions' => 'required|array'
+        $request->validate([
+            'name' => 'required|string|max:255',
         ]);
 
-        $role = Role::create($validated);
-        $role->permissions()->sync($request->permissions);
+        // Check if the role already exists
+        $role = Role::where('name', $request->name)->first();
+        if (!$role) {
+            $role = Role::create([
+                'name' => $request->name,
+            ]);
+        }
 
-        return redirect()->route('roles.index')
-            ->with('success', 'Rol başarıyla oluşturuldu.');
+        // If users are selected and the role is Admin, assign the role to those users
+        if ($request->name === 'Admin' && $request->has('user_ids')) {
+            $userIds = $request->input('user_ids');
+            foreach (User::whereIn('id', $userIds)->get() as $user) {
+                $user->is_admin = 1;
+                $user->save();
+            }
+        }
+
+        return redirect()->route('admin.roles.index')
+            ->with('success', 'Rol ve kullanıcı atamaları başarıyla güncellendi.');
     }
 
     public function show(Role $role)
     {
-        return view('roles.show', compact('role'));
+        $role->load(['permissions', 'users']);
+        return view('admin.roles.show', compact('role'));
     }
 
     public function edit(Role $role)
     {
-        return view('roles.edit', compact('role'));
+        return view('admin.roles.edit', compact('role'));
     }
 
     public function update(Request $request, Role $role)
     {
-        $validated = $request->validate([
+        $request->validate([
             'name' => 'required|string|max:255|unique:roles,name,' . $role->id,
-            'description' => 'nullable|string',
-            'permissions' => 'required|array'
         ]);
 
-        $role->update($validated);
-        $role->permissions()->sync($request->permissions);
+        $role->update([
+            'name' => $request->name,
+        ]);
 
-        return redirect()->route('roles.index')
+        return redirect()->route('admin.roles.index')
             ->with('success', 'Rol başarıyla güncellendi.');
     }
 
     public function destroy(Role $role)
     {
+        // If deleting the Admin role, remove admin status from all users
+        if ($role->name === 'Admin') {
+            \App\Models\User::where('is_admin', 1)->update(['is_admin' => 0]);
+        }
+
+        if ($role->users()->count() > 0) {
+            return redirect()->route('admin.roles.index')
+                ->with('error', 'Bu role sahip kullanıcılar var. Önce kullanıcıları başka bir role atayın.');
+        }
+
         $role->delete();
-        return redirect()->route('roles.index')
-            ->with('success', 'Rol başarıyla silindi.');
+        return redirect()->route('admin.roles.index')
+            ->with('success', 'Rol başarıyla silindi ve admin yetkileri kaldırıldı.');
+    }
+
+    public function removeAdmin(User $user)
+    {
+        $user->is_admin = 0;
+        $user->save();
+        return redirect()->route('admin.roles.index')->with('success', $user->name . ' artık admin değil.');
     }
 } 

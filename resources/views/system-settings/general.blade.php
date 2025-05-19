@@ -8,16 +8,16 @@
                 <div class="card-header">
                     <h3 class="card-title">Genel Ayarlar</h3>
                     <div class="card-tools">
-                        <a href="{{ route('system-settings.notifications') }}" class="btn btn-info btn-sm">
+                        <a href="{{ route('admin.settings.notifications') }}" class="btn btn-info btn-sm">
                             <i class="fas fa-bell"></i> Bildirim Ayarları
                         </a>
-                        <a href="{{ route('system-settings.backup') }}" class="btn btn-warning btn-sm">
+                        <a href="{{ route('admin.settings.backup') }}" class="btn btn-warning btn-sm">
                             <i class="fas fa-database"></i> Yedekleme
                         </a>
                     </div>
                 </div>
                 <div class="card-body">
-                    <form action="{{ route('system-settings.update-general') }}" method="POST">
+                    <form action="{{ route('admin.settings.update-general') }}" method="POST">
                         @csrf
                         <div class="form-group">
                             <label for="site_name">Site Adı</label>

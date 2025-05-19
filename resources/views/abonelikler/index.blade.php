@@ -1,6 +1,6 @@
 @extends(Auth::user() && Auth::user()->is_admin ? 'layouts.admin' : 'layouts.app')
 
-@section('title', 'Abonelikler')
+@section('title', Auth::user() && !Auth::user()->is_admin ? 'Aboneliklerim' : 'Abonelikler')
 
 @section('content')
 <div class="container-fluid">
@@ -36,40 +36,23 @@
                                 <thead>
                                     <tr>
                                         <th>ID</th>
-                                        <th>Müşteri Adı</th>
-                                        <th>Telefon</th>
-                                        <th>E-posta</th>
+                                        
                                         <th>Tarife</th>
                                         <th>Kampanya</th>
                                         <th>Başlangıç</th>
                                         <th>Bitiş</th>
                                         <th>Durum</th>
-                                        <th>İşlemler</th>
                                     </tr>
                                 </thead>
                                 <tbody>
                                     @foreach($abonelikler as $abonelik)
                                     <tr>
                                         <td>{{ $abonelik->id }}</td>
-                                        <td>{{ $abonelik->musteri_adi }}</td>
-                                        <td>{{ $abonelik->telefon }}</td>
-                                        <td>{{ $abonelik->email }}</td>
-                                        <td>
-                                            @if($abonelik->tarife)
-                                                {{ $abonelik->tarife->ad }}
-                                            @else
-                                                <span class="text-muted">-</span>
-                                            @endif
-                                        </td>
-                                        <td>
-                                            @if($abonelik->kampanya)
-                                                {{ $abonelik->kampanya->ad }}
-                                            @else
-                                                <span class="text-muted">-</span>
-                                            @endif
-                                        </td>
-                                        <td>{{ $abonelik->baslangic_tarihi->format('d.m.Y') }}</td>
-                                        <td>{{ $abonelik->bitis_tarihi->format('d.m.Y') }}</td>
+                                       
+                                        <td>{{ $abonelik->tarife ? $abonelik->tarife->ad : '-' }}</td>
+                                        <td>{{ $abonelik->kampanya ? $abonelik->kampanya->ad : '-' }}</td>
+                                        <td>{{ $abonelik->baslangic_tarihi ? $abonelik->baslangic_tarihi->format('d.m.Y') : '-' }}</td>
+                                        <td>{{ $abonelik->bitis_tarihi ? $abonelik->bitis_tarihi->format('d.m.Y') : '-' }}</td>
                                         <td>
                                             <span class="badge {{ $abonelik->aktif ? 'bg-success' : 'bg-danger' }}">
                                                 {{ $abonelik->aktif ? 'Aktif' : 'Pasif' }}
@@ -77,10 +60,10 @@
                                         </td>
                                         <td>
                                             <div class="btn-group" role="group">
-                                                <a href="{{ route('abonelikler.show', $abonelik) }}" class="btn btn-info btn-sm">Detay</a>
                                                 @if(Auth::user() && Auth::user()->is_admin)
-                                                    <a href="{{ route('abonelikler.edit', $abonelik) }}" class="btn btn-primary btn-sm">Düzenle</a>
-                                                    <form action="{{ route('abonelikler.destroy', $abonelik) }}" method="POST" class="d-inline" onsubmit="return confirm('Bu aboneliği silmek istediğinizden emin misiniz?');">
+                                                    <a href="{{ route('admin.abonelikler.show', $abonelik) }}" class="btn btn-info btn-sm">Detay</a>
+                                                    <a href="{{ route('admin.abonelikler.edit', $abonelik) }}" class="btn btn-primary btn-sm">Düzenle</a>
+                                                    <form action="{{ route('admin.abonelikler.destroy', $abonelik) }}" method="POST" class="d-inline" onsubmit="return confirm('Bu aboneliği silmek istediğinizden emin misiniz?');">
                                                         @csrf
                                                         @method('DELETE')
                                                         <button type="submit" class="btn btn-danger btn-sm">Sil</button>
@@ -98,7 +81,7 @@
                         </div>
                     @else
                         <div class="alert alert-info text-center">
-                            Henüz abonelik bulunmuyor.
+                            Abonelik bulunamadı.
                         </div>
                     @endif
                 </div>
