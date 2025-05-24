@@ -122,7 +122,7 @@ class AbonelikController extends Controller
         
         try {
             // Load relationships if needed
-            $abonelik->load(['tarife', 'kampanya']);
+            $abonelik->load(['tarife', 'kampanya', 'faturalar']);
             
             if (request()->is('admin/*')) {
                 return view('admin.abonelikler.show', compact('abonelik'));

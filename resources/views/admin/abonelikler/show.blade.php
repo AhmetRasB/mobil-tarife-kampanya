@@ -96,7 +96,7 @@
                                                 @endif
                                             </td>
                                             <td>
-                                                <a href="{{ route('admin.faturalar.show', $fatura) }}" class="btn btn-sm btn-info">
+                                                <a href="{{ route('admin.invoices.show', $fatura) }}" class="btn btn-info btn-sm">
                                                     <i class="fas fa-eye"></i>
                                                 </a>
                                             </td>

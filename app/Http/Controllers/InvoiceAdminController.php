@@ -9,7 +9,7 @@ class InvoiceAdminController extends Controller
 {
     public function index(Request $request)
     {
-        $query = Invoice::with(['abonelik.tarife']);
+        $query = Invoice::with(['abonelik.tarife', 'abonelik.kampanya']);
 
         // Filter by status if provided
         if ($request->has('status') && in_array($request->status, [

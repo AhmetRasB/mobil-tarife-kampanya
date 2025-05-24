@@ -70,9 +70,9 @@
                                         {{ optional($invoice->abonelik)->musteri_adi ?? '-' }}<br>
                                         <small class="text-muted">{{ optional($invoice->abonelik)->email ?? '-' }}</small>
                                     </td>
-                                    <td>{{ optional($invoice->abonelik->tarife)->ad ?? '-' }}</td>
+                                    <td>{{ optional($invoice->abonelik)->tarife->ad ?? '-' }}</td>
                                     <td>
-                                        @if($invoice->abonelik->kampanya)
+                                        @if(optional($invoice->abonelik)->kampanya)
                                             <span class="badge badge-info">
                                                 {{ $invoice->abonelik->kampanya->ad }}
                                                 ({{ $invoice->abonelik->kampanya->indirim_orani }}%)
@@ -81,10 +81,10 @@
                                             -
                                         @endif
                                     </td>
-                                    <td>₺{{ number_format(optional($invoice->abonelik->tarife)->fiyat ?? 0, 2) }}</td>
+                                    <td>₺{{ number_format(optional($invoice->abonelik)->tarife  ->fiyat ?? 0, 2) }}</td>
                                     <td>
-                                        @if($invoice->abonelik->kampanya)
-                                            ₺{{ number_format((optional($invoice->abonelik->tarife)->fiyat ?? 0) * ($invoice->abonelik->kampanya->indirim_orani / 100), 2) }}
+                                        @if(optional($invoice->abonelik)->kampanya)
+                                            ₺{{ number_format((optional($invoice->abonelik)->tarife->fiyat ?? 0) * ($invoice->abonelik->kampanya->indirim_orani / 100), 2) }}
                                         @else
                                             -
                                         @endif

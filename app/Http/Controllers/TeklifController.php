@@ -99,6 +99,19 @@ class TeklifController extends Controller
                 ->with('error', 'Bu işlemi yapma yetkiniz yok.');
         }
 
+        // If kampanya_id is provided, update only the kampanya
+        if ($request->has('kampanya_id')) {
+            $validated = $request->validate([
+                'kampanya_id' => 'nullable|exists:kampanyalar,id',
+            ]);
+
+            $teklif->update($validated);
+
+            return redirect()->route('teklifs.show', $teklif)
+                ->with('success', 'Kampanya başarıyla güncellendi.');
+        }
+
+        // Otherwise, handle status update
         $validated = $request->validate([
             'durum' => 'required|in:beklemede,onaylandi,reddedildi',
             'notlar' => 'nullable|string',
