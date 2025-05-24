@@ -5,14 +5,20 @@ namespace App\Http\Controllers;
 use App\Models\Teklif;
 use App\Models\Tarife;
 use App\Models\Kampanya;
+use App\Models\Abonelik;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Carbon\Carbon;
+use App\Services\InvoiceService;
 
 class TeklifController extends Controller
 {
-    public function __construct()
+    protected $invoiceService;
+
+    public function __construct(InvoiceService $invoiceService)
     {
         $this->middleware('auth');
+        $this->invoiceService = $invoiceService;
     }
     
     /**
@@ -93,6 +99,19 @@ class TeklifController extends Controller
                 ->with('error', 'Bu işlemi yapma yetkiniz yok.');
         }
 
+        // If kampanya_id is provided, update only the kampanya
+        if ($request->has('kampanya_id')) {
+            $validated = $request->validate([
+                'kampanya_id' => 'nullable|exists:kampanyalar,id',
+            ]);
+
+            $teklif->update($validated);
+
+            return redirect()->route('teklifs.show', $teklif)
+                ->with('success', 'Kampanya başarıyla güncellendi.');
+        }
+
+        // Otherwise, handle status update
         $validated = $request->validate([
             'durum' => 'required|in:beklemede,onaylandi,reddedildi',
             'notlar' => 'nullable|string',
@@ -100,8 +119,63 @@ class TeklifController extends Controller
 
         $teklif->update($validated);
 
-        return redirect()->route('admin.teklifs.index')
-            ->with('success', 'Teklif başarıyla güncellendi.');
+        // If the teklif is approved, automatically create a subscription
+        if ($validated['durum'] === 'onaylandi') {
+            try {
+                // Create or find subscriber
+                $subscriber = \App\Models\Subscriber::firstOrCreate(
+                    ['eposta' => $teklif->email],
+                    [
+                        'ad' => explode(' ', $teklif->ad_soyad)[0] ?? $teklif->ad_soyad,
+                        'soyad' => explode(' ', $teklif->ad_soyad)[1] ?? '',
+                        'tc_no' => null,
+                        'telefon' => $teklif->telefon,
+                        'adres' => $teklif->adres ?? '',
+                        'kayit_tarihi' => now(),
+                        'aktif_mi' => true
+                    ]
+                );
+
+                // Create subscription
+                $abonelik = Abonelik::create([
+                    'user_id' => $teklif->user_id,
+                    'subscriber_id' => $subscriber->id,
+                    'musteri_adi' => $teklif->ad_soyad,
+                    'telefon' => $teklif->telefon,
+                    'email' => $teklif->email,
+                    'tarife_id' => $teklif->tarife_id,
+                    'kampanya_id' => $teklif->kampanya_id,
+                    'baslangic_tarihi' => Carbon::now(),
+                    'bitis_tarihi' => null,
+                    'aktif' => true
+                ]);
+
+                try {
+                    // Try to generate invoice, but don't fail if it errors
+                    $this->invoiceService->generateMonthlyInvoice($abonelik);
+                } catch (\Exception $invoiceError) {
+                    // Log the invoice error but continue with subscription creation
+                    \Log::error('Invoice generation failed: ' . $invoiceError->getMessage());
+                }
+
+                // Delete the teklif after successful subscription creation
+                $teklif->delete();
+
+                return redirect()->route('admin.abonelikler.index')
+                    ->with('success', 'Teklif onaylandı ve abonelik başarıyla oluşturuldu.')
+                    ->with('warning', isset($invoiceError) ? 'Abonelik oluşturuldu fakat fatura oluşturulurken bir hata oluştu.' : null);
+
+            } catch (\Exception $e) {
+                // If subscription creation fails, revert the teklif status
+                $teklif->update(['durum' => 'beklemede']);
+                \Log::error('Subscription creation failed: ' . $e->getMessage());
+                return redirect()->route('teklifs.show', $teklif)
+                    ->with('error', 'Abonelik oluşturulurken bir hata oluştu: ' . $e->getMessage());
+            }
+        }
+
+        return redirect()->route('teklifs.index')
+            ->with('success', 'Teklif durumu güncellendi.');
     }
 
     /**

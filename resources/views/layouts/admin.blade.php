@@ -67,6 +67,36 @@
                             </a>
                         </li>
                         <li class="nav-item">
+                            <a href="{{ route('admin.invoices.index') }}" class="nav-link {{ request()->routeIs('admin.invoices.*') ? 'active' : '' }}">
+                                <i class="nav-icon fas fa-file-invoice"></i>
+                                <p>Faturalar</p>
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="{{ route('admin.abonelikler.index') }}" class="nav-link {{ request()->routeIs('admin.abonelikler.*') ? 'active' : '' }}">
+                                <i class="nav-icon fas fa-users"></i>
+                                <p>Abonelikler</p>
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="{{ route('admin.phones.index') }}" class="nav-link {{ request()->routeIs('admin.phones.*') ? 'active' : '' }}">
+                                <i class="nav-icon fas fa-mobile-alt"></i>
+                                <p>Telefonlar</p>
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="{{ route('admin.sim-cards.index') }}" class="nav-link {{ request()->routeIs('admin.sim-cards.*') ? 'active' : '' }}">
+                                <i class="nav-icon fas fa-sim-card"></i>
+                                <p>SIM Kartlar</p>
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="{{ route('admin.devices.index') }}" class="nav-link {{ request()->routeIs('admin.devices.*') ? 'active' : '' }}">
+                                <i class="nav-icon fas fa-tablet-alt"></i>
+                                <p>Cihazlar</p>
+                            </a>
+                        </li>
+                        <li class="nav-item">
                             <a href="{{ route('admin.tarifeler.index') }}" class="nav-link {{ request()->routeIs('admin.tarifeler.*') ? 'active' : '' }}">
                                 <i class="nav-icon fas fa-list"></i>
                                 <p>Tarifeler</p>
@@ -79,15 +109,45 @@
                             </a>
                         </li>
                         <li class="nav-item">
-                            <a href="{{ route('admin.abonelikler.index') }}" class="nav-link {{ request()->routeIs('admin.abonelikler.*') ? 'active' : '' }}">
-                                <i class="nav-icon fas fa-users"></i>
-                                <p>Abonelikler</p>
-                            </a>
-                        </li>
-                        <li class="nav-item">
                             <a href="{{ route('admin.teklifs.index') }}" class="nav-link {{ request()->routeIs('admin.teklifs.*') ? 'active' : '' }}">
                                 <i class="nav-icon fas fa-file-invoice"></i>
                                 <p>Teklifler</p>
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="{{ route('admin.users.index') }}" class="nav-link {{ request()->routeIs('admin.users.*') ? 'active' : '' }}">
+                                <i class="nav-icon fas fa-user"></i>
+                                <p>Kullanıcılar</p>
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="{{ route('admin.roles.index') }}" class="nav-link {{ request()->routeIs('admin.roles.*') ? 'active' : '' }}">
+                                <i class="nav-icon fas fa-user-shield"></i>
+                                <p>Roller</p>
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="{{ route('admin.settings.general') }}" class="nav-link {{ request()->routeIs('admin.settings.*') ? 'active' : '' }}">
+                                <i class="nav-icon fas fa-cog"></i>
+                                <p>Ayarlar</p>
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="{{ route('admin.reports.subscribers') }}" class="nav-link {{ request()->routeIs('admin.reports.subscribers') ? 'active' : '' }}">
+                                <i class="nav-icon fas fa-chart-bar"></i>
+                                <p>Abone Raporları</p>
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="{{ route('admin.reports.stock') }}" class="nav-link {{ request()->routeIs('admin.reports.stock') ? 'active' : '' }}">
+                                <i class="nav-icon fas fa-boxes"></i>
+                                <p>Stok Raporları</p>
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="{{ route('admin.reports.financial') }}" class="nav-link {{ request()->routeIs('admin.reports.financial') ? 'active' : '' }}">
+                                <i class="nav-icon fas fa-coins"></i>
+                                <p>Finansal Raporlar</p>
                             </a>
                         </li>
                     </ul>
@@ -139,6 +199,8 @@
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
     <!-- AdminLTE JS -->
     <script src="https://cdn.jsdelivr.net/npm/admin-lte@3.2/dist/js/adminlte.min.js"></script>
+    <!-- Chart.js -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
     
     @stack('scripts')
 </body>

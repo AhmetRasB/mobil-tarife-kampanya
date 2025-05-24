@@ -42,4 +42,9 @@ class Abonelik extends Model
     {
         return $this->belongsTo(User::class);
     }
+
+    public function faturalar()
+    {
+        return $this->hasMany(Invoice::class, 'abonelik_id');
+    }
 }

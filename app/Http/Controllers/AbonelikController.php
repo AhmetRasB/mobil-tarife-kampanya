@@ -8,12 +8,16 @@ use App\Models\Tarife;
 use App\Models\Kampanya;
 use App\Models\Teklif;
 use Illuminate\Support\Facades\Auth;
+use App\Services\InvoiceService;
 
 class AbonelikController extends Controller
 {
-    public function __construct()
+    protected $invoiceService;
+
+    public function __construct(InvoiceService $invoiceService)
     {
         $this->middleware('auth');
+        $this->invoiceService = $invoiceService;
     }
 
     /**
@@ -21,12 +25,14 @@ class AbonelikController extends Controller
      */
     public function index()
     {
-        if (Auth::user()->is_admin) {
+        if (request()->is('admin/*')) {
+            // Admin view
             $abonelikler = Abonelik::with(['tarife', 'kampanya', 'user'])->orderBy('created_at', 'desc')->paginate(10);
-        } else {
-            $abonelikler = Auth::user()->abonelikler()->with(['tarife', 'kampanya'])->orderBy('created_at', 'desc')->paginate(10);
+            return view('admin.abonelikler.index', compact('abonelikler'));
         }
 
+        // User view
+        $abonelikler = Auth::user()->abonelikler()->with(['tarife', 'kampanya'])->orderBy('created_at', 'desc')->paginate(10);
         return view('abonelikler.index', compact('abonelikler'));
     }
 
@@ -35,6 +41,11 @@ class AbonelikController extends Controller
      */
     public function create()
     {
+        if (!Auth::user()->is_admin) {
+            return redirect()->route('abonelikler.index')
+                ->with('error', 'Bu işlemi yapma yetkiniz yok.');
+        }
+
         $tarifeler = Tarife::all();
         $kampanyalar = Kampanya::all();
         $teklif = null;
@@ -43,7 +54,7 @@ class AbonelikController extends Controller
             $teklif = Teklif::with(['user', 'tarife', 'kampanya'])->findOrFail(request('teklif_id'));
         }
         
-        return view('abonelikler.create', compact('tarifeler', 'kampanyalar', 'teklif'));
+        return view('admin.abonelikler.create', compact('tarifeler', 'kampanyalar', 'teklif'));
     }
 
     /**
@@ -51,6 +62,11 @@ class AbonelikController extends Controller
      */
     public function store(Request $request)
     {
+        if (!Auth::user()->is_admin) {
+            return redirect()->route('abonelikler.index')
+                ->with('error', 'Bu işlemi yapma yetkiniz yok.');
+        }
+
         $request->validate([
             'user_id' => 'nullable|exists:users,id',
             'musteri_adi' => 'required|string|max:255',
@@ -70,6 +86,16 @@ class AbonelikController extends Controller
 
         $abonelik = Abonelik::create($request->all());
         
+        // Generate all missing invoices for this subscription (from start date to now)
+        app(\App\Services\InvoiceService::class)->generateMonthlyInvoice($abonelik, null); // Current month
+        $start = \Carbon\Carbon::parse($abonelik->baslangic_tarihi)->startOfMonth();
+        $end = \Carbon\Carbon::now()->startOfMonth();
+        while ($start <= $end) {
+            $period = $start->format('Y-m');
+            app(\App\Services\InvoiceService::class)->generateMonthlyInvoice($abonelik, $period);
+            $start->addMonth();
+        }
+
         if ($request->has('teklif_id')) {
             $teklif = Teklif::findOrFail($request->teklif_id);
             // Teklifi işlenmiş olarak işaretle
@@ -80,7 +106,7 @@ class AbonelikController extends Controller
             $teklif->delete();
         }
 
-        return redirect()->route('abonelikler.index')
+        return redirect()->route('admin.abonelikler.show', $abonelik)
             ->with('success', 'Abonelik başarıyla oluşturuldu.');
     }
 
@@ -90,17 +116,21 @@ class AbonelikController extends Controller
     public function show(Abonelik $abonelik)
     {
         if (!Auth::user()->is_admin && $abonelik->user_id !== Auth::id()) {
-            return redirect()->route('abonelikler.index')
+            return redirect()->route('admin.abonelikler.index')
                 ->with('error', 'Bu aboneliği görüntüleme yetkiniz yok.');
         }
         
         try {
             // Load relationships if needed
-            $abonelik->load(['tarife', 'kampanya']);
+            $abonelik->load(['tarife', 'kampanya', 'faturalar']);
+            
+            if (request()->is('admin/*')) {
+                return view('admin.abonelikler.show', compact('abonelik'));
+            }
             
             return view('abonelikler.show', compact('abonelik'));
         } catch (\Exception $e) {
-            return redirect()->route('abonelikler.index')
+            return redirect()->route('admin.abonelikler.index')
                 ->with('error', 'Abonelik bilgileri görüntülenirken bir hata oluştu.');
         }
     }
@@ -111,14 +141,14 @@ class AbonelikController extends Controller
     public function edit(Abonelik $abonelik)
     {
         if (!Auth::user()->is_admin) {
-            return redirect()->route('abonelikler.index')
+            return redirect()->route('admin.abonelikler.index')
                 ->with('error', 'Bu işlemi yapma yetkiniz yok.');
         }
         
         $tarifeler = Tarife::all();
         $kampanyalar = Kampanya::all();
         
-        return view('abonelikler.edit', compact('abonelik', 'tarifeler', 'kampanyalar'));
+        return view('admin.abonelikler.edit', compact('abonelik', 'tarifeler', 'kampanyalar'));
     }
 
     /**
@@ -127,7 +157,7 @@ class AbonelikController extends Controller
     public function update(Request $request, Abonelik $abonelik)
     {
         if (!Auth::user()->is_admin) {
-            return redirect()->route('abonelikler.index')
+            return redirect()->route('admin.abonelikler.index')
                 ->with('error', 'Bu işlemi yapma yetkiniz yok.');
         }
         
@@ -145,7 +175,7 @@ class AbonelikController extends Controller
 
         $abonelik->update($request->all());
 
-        return redirect()->route('abonelikler.index')
+        return redirect()->route('admin.abonelikler.index')
             ->with('success', 'Abonelik başarıyla güncellendi.');
     }
 
@@ -155,13 +185,13 @@ class AbonelikController extends Controller
     public function destroy(Abonelik $abonelik)
     {
         if (!Auth::user()->is_admin) {
-            return redirect()->route('abonelikler.index')
+            return redirect()->route('admin.abonelikler.index')
                 ->with('error', 'Bu işlemi yapma yetkiniz yok.');
         }
         
         $abonelik->delete();
 
-        return redirect()->route('abonelikler.index')
+        return redirect()->route('admin.abonelikler.index')
             ->with('success', 'Abonelik başarıyla silindi.');
     }
 }

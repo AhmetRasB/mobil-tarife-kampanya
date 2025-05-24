@@ -79,10 +79,35 @@ use Illuminate\Support\Facades\Auth;
                         </p>
                     </div>
 
-                    @if($teklif->kampanya)
+                    @if(Auth::user() && Auth::user()->is_admin && $teklif->durum == 'beklemede')
+                    <div class="mb-3">
+                        <label class="form-label fw-bold">Kampanya Seçimi</label>
+                        <form action="{{ route('teklifs.update', $teklif->id) }}" method="POST" class="mb-3">
+                            @csrf
+                            @method('PUT')
+                            <div class="input-group">
+                                <select name="kampanya_id" class="form-select">
+                                    <option value="">Kampanya Seçin</option>
+                                    @foreach(\App\Models\Kampanya::where('aktif', true)->get() as $kampanya)
+                                        <option value="{{ $kampanya->id }}" {{ $teklif->kampanya_id == $kampanya->id ? 'selected' : '' }}>
+                                            {{ $kampanya->ad }} (%{{ $kampanya->indirim_orani }} indirim)
+                                        </option>
+                                    @endforeach
+                                </select>
+                                <button type="submit" class="btn btn-primary">Kampanyayı Güncelle</button>
+                            </div>
+                        </form>
+                    </div>
+                    @else
                     <div class="mb-3">
                         <label class="form-label fw-bold">Kampanya</label>
-                        <p>{{ $teklif->kampanya->ad }} ({{ $teklif->kampanya->indirim_orani }}% indirim)</p>
+                        <p>
+                            @if($teklif->kampanya)
+                                {{ $teklif->kampanya->ad }} ({{ $teklif->kampanya->indirim_orani }}% indirim)
+                            @else
+                                <span class="text-muted">Kampanya yok</span>
+                            @endif
+                        </p>
                     </div>
                     @endif
 
@@ -117,12 +142,6 @@ use Illuminate\Support\Facades\Auth;
                                 <button type="submit" class="btn btn-danger">Reddet</button>
                             </form>
                         </div>
-                        @endif
-                        
-                        @if($teklif->durum == 'onaylandi')
-                            @if(Auth::user() && Auth::user()->is_admin)
-                                <a href="{{ route('abonelikler.create', ['teklif_id' => $teklif->id]) }}" class="btn btn-primary">Abonelik Oluştur</a>
-                            @endif
                         @endif
                     </div>
                 </div>

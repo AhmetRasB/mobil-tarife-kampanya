@@ -20,6 +20,8 @@ class User extends Authenticatable
         'name',
         'email',
         'password',
+        'role_id',
+        'is_active',
         'is_admin',
     ];
 
@@ -41,6 +43,7 @@ class User extends Authenticatable
     protected $casts = [
         'email_verified_at' => 'datetime',
         'password' => 'hashed',
+        'is_active' => 'boolean',
         'is_admin' => 'boolean',
     ];
     
@@ -57,5 +60,34 @@ class User extends Authenticatable
     public function isAdmin()
     {
         return $this->is_admin;
+    }
+
+    public function role()
+    {
+        return $this->belongsTo(Role::class);
+    }
+
+    public function hasRole($role)
+    {
+        if (is_string($role)) {
+            return $this->role->name === $role;
+        }
+        return $this->role->id === $role->id;
+    }
+
+    public function hasPermission($permission)
+    {
+        if (is_string($permission)) {
+            return $this->role->permissions->contains('slug', $permission);
+        }
+        return $this->role->permissions->contains('id', $permission->id);
+    }
+
+    public function hasAnyPermission($permissions)
+    {
+        if (is_string($permissions)) {
+            return $this->role->permissions->contains('slug', $permissions);
+        }
+        return $this->role->permissions->intersect($permissions)->isNotEmpty();
     }
 }

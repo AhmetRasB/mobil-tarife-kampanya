@@ -22,6 +22,33 @@ Bu proje, mobil operatörler için tarife ve kampanya yönetim sistemidir. Siste
 - İstatistik ve raporlama
 - Dashboard ile genel durum takibi
 
+### Abonelik ve Fatura Yönetimi
+- Otomatik fatura oluşturma
+- Aylık fatura takibi
+- Fatura durumu yönetimi (ödenmiş/ödenmemiş/askıya alınmış)
+- Fatura dönemi takibi
+- Fatura açıklamaları ve detayları
+
+### Cihaz ve SIM Kart Yönetimi
+- Telefon envanteri takibi
+- SIM kart durumu yönetimi
+- IMEI ve seri numarası takibi
+- Cihaz durumu izleme (aktif/pasif/arızalı)
+- SIM kart aktivasyon takibi
+
+### Raporlama Sistemi
+- Abone raporları
+- Stok raporları
+- Finansal raporlar
+- Aylık/yıllık istatistikler
+- Grafiksel analizler
+
+### Teknik Güncellemeler
+- Subscriber tablosunda tc_no alanı nullable yapıldı
+- Teklif onaylama sürecinde abone oluşturma iyileştirildi
+- Fatura oluşturma servisi eklendi
+- Abonelik-fatura ilişkisi kuruldu
+
 ## Teknik Detaylar
 
 ### Kullanılan Teknolojiler
@@ -34,13 +61,58 @@ Bu proje, mobil operatörler için tarife ve kampanya yönetim sistemidir. Siste
 - Font Awesome
 
 ### Veritabanı Yapısı
+
+#### Temel Tablolar
 - users: Kullanıcı bilgileri
-- tarifeler: Tarife detayları
-- kampanyalar: Kampanya bilgileri
-- abonelikler: Abonelik kayıtları
-- teklifs: Teklif kayıtları
-- sessions: Oturum yönetimi
-- password_reset_tokens: Şifre sıfırlama işlemleri
+- roles: Rol tanımları
+- permissions: Yetki tanımları
+- role_user: Kullanıcı-Rol ilişkileri
+- permission_role: Rol-Yetki ilişkileri
+- positions: Pozisyon tanımları
+
+#### Log ve İzleme Tabloları
+- audit_trail: Denetim kayıtları
+- login_logs: Giriş kayıtları
+- logout_logs: Çıkış kayıtları
+
+#### Bildirim Tabloları
+- notification_types: Bildirim türleri
+- notifications: Bildirimler
+- notification_assignments: Bildirim atamaları
+- notification_reads: Bildirim okunma kayıtları
+
+#### Sistem Tabloları
+- system_settings: Sistem ayarları
+- related_settings: İlişkili ayarlar
+- api_settings: API ayarları
+
+#### Takvim ve Servis Tabloları
+- calendar_events: Takvim etkinlikleri
+- tele_services: Telekom servisleri
+- sms_logs: SMS kayıtları
+- fax_logs: Fax kayıtları
+- call_logs: Arama kayıtları
+
+#### Varlık ve Stok Tabloları
+- assets: Varlıklar
+- stock_movements: Stok hareketleri
+- phones: Telefonlar
+- sim_cards: SIM kartları
+- devices: Cihazlar
+
+#### Organizasyon Tabloları
+- locations: Konumlar
+- sectors: Sektörler
+- organizations: Kurumlar
+- ad_networks: Reklam ağları
+- authorized_persons: Yetkili kişiler
+
+#### Abonelik Tabloları
+- subscribers: Aboneler
+- subscriptions: Abonelikler
+- tarifeler: Tarifeler
+- kampanyalar: Kampanyalar
+- teklifs: Teklifler
 
 ### Güvenlik Özellikleri
 - CSRF koruması
@@ -138,6 +210,6 @@ php artisan serve
 Bu proje MIT lisansı altında lisanslanmıştır. Detaylar için [LICENSE](LICENSE) dosyasına bakın.
 
 ## İletişim
-Proje sahibi: [AhmetRasB] - [ahmetrasimbayhan@gmail.com]
+
 
 Proje Linki: [https://github.com/ahmetrasb/mobil-tarife-kampanya](https://github.com/ahmetrasb/mobil-tarife-kampanya)

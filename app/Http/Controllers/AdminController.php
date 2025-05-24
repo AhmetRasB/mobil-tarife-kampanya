@@ -7,65 +7,43 @@ use App\Models\Kampanya;
 use App\Models\User;
 use App\Models\Tarife;
 use App\Models\Abonelik;
+use App\Models\Invoice;
+use App\Models\Subscriber;
+use App\Models\Phone;
+use App\Models\SimCard;
+use Carbon\Carbon;
+use Illuminate\Support\Facades\DB;
 
 class AdminController extends Controller
 {
-    public function kampanyalar()
-    {
-        // Kampanyaları listeleme işlemi
-        $kampanyalar = Kampanya::all();
-        return view('admin.kampanyalar', compact('kampanyalar'));
-    }
-
-    public function kampanyaEkle(Request $request)
-    {
-        // Kampanya ekleme işlemi
-        $request->validate([
-            'ad' => 'required|string|max:255',
-            'aciklama' => 'nullable|string',
-        ]);
-
-        Kampanya::create($request->all());
-        return redirect()->route('admin.kampanyalar')->with('success', 'Kampanya başarıyla eklendi.');
-    }
-
-    public function kampanyaDuzenle(Request $request, $id)
-    {
-        // Kampanya düzenleme işlemi
-        $kampanya = Kampanya::findOrFail($id);
-
-        $request->validate([
-            'ad' => 'required|string|max:255',
-            'aciklama' => 'nullable|string',
-        ]);
-
-        $kampanya->update($request->all());
-        return redirect()->route('admin.kampanyalar')->with('success', 'Kampanya başarıyla güncellendi.');
-    }
-
-    public function kampanyaSil($id)
-    {
-        // Kampanya silme işlemi
-        $kampanya = Kampanya::findOrFail($id);
-        $kampanya->delete();
-        return redirect()->route('admin.kampanyalar')->with('success', 'Kampanya başarıyla silindi.');
-    }
-
     public function dashboard()
     {
+        // Get total counts
         $totalUsers = User::count();
-        $totalKampanyalar = \App\Models\Kampanya::count();
+        $totalKampanyalar = Kampanya::count();
         $totalTarifeler = Tarife::count();
         $totalAbonelikler = Abonelik::count();
 
-        // Son 5 yeni kullanıcı
-        $recentUsers = User::orderBy('created_at', 'desc')->take(5)->get();
+        // Get invoice statistics
+        $totalInvoices = Invoice::count();
+        $paidInvoices = Invoice::where('status', 'paid')->count();
+        $unpaidInvoices = Invoice::where('status', 'unpaid')->count();
+        $suspendedInvoices = Invoice::where('status', 'suspended')->count();
 
-        // Son 30 gün için günlük yeni kullanıcı grafiği
-        $userStats = User::selectRaw('DATE(created_at) as date, COUNT(*) as count')
-            ->where('created_at', '>=', now()->subDays(30))
+        // Get recent users
+        $recentUsers = User::latest()->take(5)->get();
+
+        // Get user statistics for the last 30 days
+        $userStats = User::select(DB::raw('DATE(created_at) as date'), DB::raw('count(*) as count'))
+            ->where('created_at', '>=', Carbon::now()->subDays(30))
             ->groupBy('date')
             ->orderBy('date')
+            ->get();
+
+        // Get recent invoices
+        $recentInvoices = Invoice::with('subscriber')
+            ->latest()
+            ->take(5)
             ->get();
 
         return view('admin.dashboard', compact(
@@ -73,8 +51,18 @@ class AdminController extends Controller
             'totalKampanyalar',
             'totalTarifeler',
             'totalAbonelikler',
+            'totalInvoices',
+            'paidInvoices',
+            'unpaidInvoices',
+            'suspendedInvoices',
             'recentUsers',
-            'userStats'
+            'userStats',
+            'recentInvoices'
         ));
+    }
+
+    public function __construct()
+    {
+        $this->middleware(['auth', 'admin']);
     }
 }
